@@ -7,9 +7,9 @@ pygame.init()
 #pygame.mixer.musik.load('resours/LA la land.mp3')
 #pygame.mixer.musik.play(-1)
 
-size = (1280, 720)
-screen = pygame.display.set_mode(size)
-pygame.display.set_caption('Моя игра')
+size = (0, 0)
+screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+pygame.display.set_caption('Искусство')
 BACKGROUND = (255, 255, 255)
 screen.fill(BACKGROUND)
 
@@ -26,8 +26,8 @@ while running:
 
     for i in range(10):
         color = random.choice(colors)
-        x = random.randint(0, size[0])
-        y = random.randint(0, size[1])
+        x = random.randint(0, 1280)
+        y = random.randint(0, 1000)
         pygame.draw.circle(screen, color, (x, y), random.randint(1, 100))
 
     pygame.display.update()
