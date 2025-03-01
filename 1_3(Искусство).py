@@ -3,9 +3,9 @@ from all_colors import *
 import pygame
 pygame.init()
 
-#pygame.mixer.init()
-#pygame.mixer.musik.load('resours/LA la land.mp3')
-#pygame.mixer.musik.play(-1)
+pygame.mixer.init()
+pygame.mixer.music.load('resours/La La Land.mp3')
+pygame.mixer.music.play(-1)
 
 size = (0, 0)
 screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
