@@ -39,10 +39,10 @@ while running:
     if keys[K_DOWN]:
         y += speed
 
-    if y < 0:
-        y = 0
-    if y > 400:
-        y = 400
+    if y < -40:
+        y = -40
+    if y > 440:
+        y = 440
     if x < 0:
         x = 0
     if x > 600:
