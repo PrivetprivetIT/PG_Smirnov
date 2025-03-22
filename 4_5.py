@@ -1,4 +1,3 @@
-from all_colors import *
 from pygame.constants import *
 import pygame
 pygame.init()
