@@ -34,6 +34,7 @@ score1 = 0
 score2 = 0
 
 font = pygame.font.SysFont(None, 48)
+font1 = pygame.font.SysFont(None, 32)
 
 ai_mode = True
 
@@ -100,15 +101,17 @@ while running:
         BALL_SPEED_X = - BALL_SPEED_X
         BALL_SPEED_X *= 1.1
         BALL_SPEED_Y *= 1.1
+        if BALL_SPEED_X >= 30:
+            BALL_SPEED_X = BALL_SPEED_Y = 30
 
     if ball_rect.left <= 0:
         ball_rect.center = (size[0] // 2, size[1] // 2)
-        BALL_SPEED_X = BALL_SPEED_Y = 5
+        #BALL_SPEED_X = BALL_SPEED_Y = 5
         score2 += 1
 
     if ball_rect.x > size[0]:
         ball_rect.center = (size[0] // 2, size[1] // 2)
-        BALL_SPEED_X = BALL_SPEED_Y = 5
+        #BALL_SPEED_X = BALL_SPEED_Y = 5
         score1 += 1
 
     screen.fill(BACKGROUND)
@@ -118,18 +121,26 @@ while running:
     pygame.draw.rect(screen, WHITE, ball_rect)
     pygame.draw.line(screen, WHITE, (size[0] // 2, 0), (size[0] // 2, size[1]), 1)
 
-    if score1 == 3:
+    if score1 == 10:
         BALL_SPEED_X = 0
         BALL_SPEED_Y = 0
         score_text = font.render(f'Первый игрок победил', True, WHITE)
-    elif score2 == 3:
+    elif score2 == 10:
         BALL_SPEED_X = 0
         BALL_SPEED_Y = 0
         score_text = font.render(f'Второй игрок победил', True, WHITE)
     else:
         score_text = font.render(f'{score1} : {score2}', True, WHITE)
 
+    BALL_SPEED = int(BALL_SPEED_X)
+    if BALL_SPEED < 0:
+        BALL_SPEED = -BALL_SPEED
+
+    speed_text = font1.render(f'Скорость : {BALL_SPEED}', True, WHITE)
+
     screen.blit(score_text, (size[0] // 2 - score_text.get_width() // 2, 10))
+    screen.blit(speed_text, (size[0] - speed_text.get_width() - 10, 10))
+
 
     pygame.display.flip()
     clock.tick(FPS)
