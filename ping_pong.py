@@ -106,8 +106,10 @@ while running:
 
     if ball_rect.top < 0:
         BALL_SPEED_Y = - BALL_SPEED_Y
+        hit_sound.play()
     if ball_rect.bottom > 720:
         BALL_SPEED_Y = - BALL_SPEED_Y
+        hit_sound.play()
 
     if ball_rect.colliderect(paddle_rect) or ball_rect.colliderect(paddle_rect1):
         BALL_SPEED_X = - BALL_SPEED_X
