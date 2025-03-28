@@ -7,6 +7,9 @@ from pygame.constants import *
 import pygame
 pygame.init()
 
+import pygame.mixer
+pygame.mixer.init()
+
 size = (1280, 720)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption('Пинг понг')
@@ -35,6 +38,15 @@ score2 = 0
 
 font = pygame.font.SysFont(None, 48)
 font1 = pygame.font.SysFont(None, 32)
+
+
+hit_sound = pygame.mixer.Sound('resours/hit.mp3')
+miss_sound = pygame.mixer.Sound('resours/miss.mp3')
+
+volume = 0.5
+hit_sound.set_volume(volume)
+miss_sound.set_volume(volume)
+
 
 ai_mode = True
 
@@ -104,15 +116,21 @@ while running:
         if BALL_SPEED_X >= 30:
             BALL_SPEED_X = BALL_SPEED_Y = 30
 
+        hit_sound.play()
+
     if ball_rect.left <= 0:
         ball_rect.center = (size[0] // 2, size[1] // 2)
         #BALL_SPEED_X = BALL_SPEED_Y = 5
         score2 += 1
 
+        miss_sound.play()
+
     if ball_rect.x > size[0]:
         ball_rect.center = (size[0] // 2, size[1] // 2)
         #BALL_SPEED_X = BALL_SPEED_Y = 5
         score1 += 1
+
+        miss_sound.play()
 
     screen.fill(BACKGROUND)
 
