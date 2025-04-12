@@ -13,12 +13,7 @@ ghost_images = {"red": pygame.image.load("resours/red_ghost.png"), "pink": pygam
 
 
 def ghosts():
-
-    if is_delayed == False:
-        x3 = random.randint(0, 700)
-        y3 = random.randint(0, 500)
-
-        return (x3, y3)
+    pass
 
 
 
@@ -88,13 +83,11 @@ BACKGROUND = (0, 0, 0)
 pacman_pos = (400, 300)
 speed = 4
 
-ghost_pos = (400, 400)
+x3, y3 = 400, 400
 
 clock = pygame.time.Clock()
 FPS = 60
 
-delay_duration = 1000
-is_delayed = True
 
 running = True
 
@@ -102,15 +95,6 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
-    current_time = pygame.time.get_ticks()
-
-    if current_time == delay_duration:
-        is_delayed = False
-
-    if current_time > 2000:
-        current_time = 0
-        is_delayed = True
 
     mouse_pos = pygame.mouse.get_pos()
 
@@ -121,17 +105,19 @@ while running:
     colors = ["red", "pink", "blue", "orange"]
     ghost_color = random.choice(colors)
 
-    ghost_pos = ghosts()
-
-
     screen.fill (BACKGROUND)
 
     pacman_image = pacman_images[direction]
     screen.blit(pacman_image, pacman_pos)
 
 
-    ghost_image = ghost_images[ghost_color]
-    if is_delayed == False:
+    if random.randint(1, 100) == 1:
+        x3 = random.randint(0, 700)
+        y3 = random.randint(0, 500)
+
+        ghost_pos = (x3, y3)
+
+        ghost_image = ghost_images[ghost_color]
         screen.blit(ghost_image, ghost_pos)
 
     pygame.display.flip()
