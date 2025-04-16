@@ -1,4 +1,3 @@
-from all_colors import *
 import random
 import time
 import pygame
@@ -83,7 +82,6 @@ BACKGROUND = (0, 0, 0)
 pacman_pos = (400, 300)
 speed = 4
 
-points = 0
 
 ghost_pos = (random.randint(0, 700), random.randint(0, 500))
 ghost_color = random.choice(["red", "pink", "blue", "orange"])
@@ -93,8 +91,6 @@ ghost_duration = 2
 
 clock = pygame.time.Clock()
 FPS = 60
-
-font = pygame.font.Font(None, 36)
 
 running = True
 
@@ -111,7 +107,7 @@ while running:
 
 
     if current_time - ghost_spawn_time >= ghost_duration:
-        ghost_pos = (random.randint(0, size[0] - 100), random.randint(0, size[1] - 100))
+        ghost_pos = (random.randint(0, size[0] - 50), random.randint(0, size[1] - 50))
         ghost_color = random.choice(["red", "pink", "blue", "orange"])
         ghost_spawn_time = current_time
 
@@ -120,7 +116,6 @@ while running:
         ghost_pos = (random.randint(0, size[0] - 100), random.randint(0, size[1] - 100))
         ghost_color = random.choice(["red", "pink", "blue", "orange"])
         ghost_spawn_time = current_time
-        points += 1
 
     screen.fill(BACKGROUND)
 
@@ -130,9 +125,6 @@ while running:
     if ghost_pos and (current_time - ghost_spawn_time < ghost_duration):
         ghost_image = ghost_images[ghost_color]
     screen.blit(ghost_image, ghost_pos)
-
-    points_text = font.render(f"Очки: {points}", True, WHITE)
-    screen.blit(points_text, (10, 10))
 
     pygame.display.flip()
     clock.tick(FPS)

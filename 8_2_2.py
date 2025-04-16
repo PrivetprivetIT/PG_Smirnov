@@ -13,6 +13,7 @@ LINE_COLOR = (255, 255, 255)
 PREVIEW_COLOR = (192, 192, 192)
 
 points = []
+lines = []
 
 FPS = 60
 clock = pygame.time.Clock()
@@ -30,23 +31,23 @@ while running:
             if event.button == 1:
                 points.append(event.pos)
             elif event.button == 3:
-                if show_preview:
-                    show_preview = False
-                else:
-                    show_preview = True
+                if len(points) > 0:
+                    lines.append(points.copy())
+                    points.clear()
 
 
     screen.fill(BACKGROUND)
 
-    for i in range(len(points) - 1):
-        start_point = points[i]
-        end_point = points[i+1]
-        pygame.draw.line(screen, LINE_COLOR, start_point, end_point, 3)
+    for line in lines:
+        if len(line) > 1:
+            pygame.draw.lines(screen, LINE_COLOR, False, line, 3)
 
-    if len(points) > 1 and show_preview:
+    if len(points) > 1:
+        pygame.draw.lines(screen, LINE_COLOR, False, points, 3)
+
+    if len(points) > 0 and show_preview:
         mouse_pos = pygame.mouse.get_pos()
-        last_point = points[i+1]
-        pygame.draw.aaline(screen, PREVIEW_COLOR, last_point, mouse_pos, 2)
+        pygame.draw.aaline(screen, PREVIEW_COLOR, points[-1], mouse_pos, 2)
 
     pygame.display.flip()
     clock.tick(FPS)
