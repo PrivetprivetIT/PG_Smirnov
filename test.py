@@ -76,7 +76,8 @@ def check_collision(pos1, pos2, radius=50):
     distance = ((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2) ** 0.5
     return distance < radius
 
-def spawn(pacman_pos, size, min_distance=100):
+
+def get_valid_ghost_position(pacman_pos, size, min_distance=100):
     while True:
         ghost_pos = (random.randint(0, size[0] - 100), random.randint(0, size[1] - 100))
         distance = ((ghost_pos[0] - pacman_pos[0]) ** 2 + (ghost_pos[1] - pacman_pos[1]) ** 2) ** 0.5
@@ -91,24 +92,21 @@ pygame.display.set_caption("Pac-Man наоборот")
 BACKGROUND = (0, 0, 0)
 
 pacman_pos = (400, 300)
-speed = 8
+speed = 4
 
 points = 0
 lives = 3
 
-ghost_pos = spawn(pacman_pos, size)
+ghost_pos = get_valid_ghost_position(pacman_pos, size)
 ghost_color = random.choice(ghost)
 
 ghost_spawn_time = 0
-ghost_duration = 1.5
+ghost_duration = 2
 
 clock = pygame.time.Clock()
 FPS = 60
 
 font = pygame.font.Font(None, 36)
-end_font = pygame.font.Font(None, 70)
-
-end_text = end_font.render("", True, WHITE)
 
 running = True
 
@@ -123,22 +121,19 @@ while running:
     direction = get_direction(pacman_pos, mouse_pos)
     pacman_pos = move_towards(pacman_pos, mouse_pos, speed)
 
-
     if current_time - ghost_spawn_time >= ghost_duration:
-        ghost_pos = spawn(pacman_pos, size)
+        ghost_pos = get_valid_ghost_position(pacman_pos, size)
         ghost_color = random.choice(ghost)
         ghost_spawn_time = current_time
-
 
     if check_collision(pacman_pos, ghost_pos):
         if ghost_color == "cherry":
             lives -= 1
         else:
             points += 1
-        ghost_pos = spawn(pacman_pos, size)
+        ghost_pos = get_valid_ghost_position(pacman_pos, size)
         ghost_color = random.choice(ghost)
         ghost_spawn_time = current_time
-
 
     screen.fill(BACKGROUND)
 
@@ -147,28 +142,13 @@ while running:
 
     if ghost_pos and (current_time - ghost_spawn_time < ghost_duration):
         ghost_image = ghost_images[ghost_color]
-    screen.blit(ghost_image, ghost_pos)
+        screen.blit(ghost_image, ghost_pos)
 
     points_text = font.render(f"Очки: {points}", True, WHITE)
     screen.blit(points_text, (10, 10))
 
     lives_text = font.render(f"Жизни: {lives}", True, WHITE)
     screen.blit(lives_text, (670, 10))
-
-
-    if lives == 0:
-        speed = 0
-        pacman_pos = (400, 300)
-        ghost_duration = 100
-        end_text = end_font.render("Вы проиграли!", True, WHITE)
-
-    if points == 30:
-        speed = 0
-        pacman_pos = (400, 300)
-        ghost_duration = 100
-        end_text = end_font.render("Вы выиграли!", True, WHITE)
-
-    screen.blit(end_text, (200, 200))
 
     pygame.display.flip()
     clock.tick(FPS)
