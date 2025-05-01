@@ -11,7 +11,6 @@ def draw_palette():
     screen.blit(palette, palette_rect.topleft)
 
 from all_colors import COLORS
-import random
 import pygame
 pygame.init()
 
@@ -35,9 +34,12 @@ palette = pygame.Surface(palette_rect.size)
 
 dragging_palette = False
 
+
 rectangles = []
 dragging = False
-a = False
+is_filled = False
+top_left = (0, 0)
+size1 = (0, 0)
 
 FPS = 60
 clock = pygame.time.Clock()
@@ -49,33 +51,39 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
             top_left = event.pos
-            size = 0, 0
+            size1 = 0, 0
             dragging = True
 
         elif event.type == pygame.MOUSEMOTION and dragging:
             right_bottom = event.pos
-            size = (right_bottom[0] - top_left[0], right_bottom[1] - top_left[1])
+            size1 = (right_bottom[0] - top_left[0], right_bottom[1] - top_left[1])
 
-        elif event.type == pygame.MOUSEBUTTONUP:
+        elif event.type == pygame.MOUSEBUTTONUP and dragging:
             right_bottom = event.pos
-            size = (right_bottom[0] - top_left[0], right_bottom[1] - top_left[1])
+            size1 = (right_bottom[0] - top_left[0], right_bottom[1] - top_left[1])
             dragging = False
-            rect = pygame.Rect(top_left, size)
-            rectangles.append((rect, brush_color))
+            rect = pygame.Rect(top_left, size1)
+            rectangles.append({'rect': rect, 'color': brush_color, 'filled': is_filled})
 
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                if a:
-                    a = False
-                else:
-                    a = True
+                is_filled = not is_filled
+
+                for rect in rectangles:
+                    rect['filled'] = is_filled
+
+                canvas.fill(BACKGROUND)
+
+                for rectangle in rectangles:
+                    if rectangle['filled']:
+                        pygame.draw.rect(canvas, rectangle['color'], rectangle['rect'])
+                    else:
+                        pygame.draw.rect(canvas, rectangle['color'], rectangle['rect'], 1)
 
 
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
+            elif event.key == pygame.K_UP:
                 brush_width += 1
 
             elif event.key == pygame.K_DOWN:
@@ -94,16 +102,12 @@ while running:
         else:
             pygame.draw.circle(canvas, brush_color, mouse_pos, brush_width)
 
-
-
+    screen.fill(BACKGROUND)
     screen.blit(canvas, (0, 0))
     draw_palette()
 
-    for rectangle, color in rectangles:
-        if a:
-            pygame.draw.rect(screen, color, rectangle)
-        else:
-            pygame.draw.rect(screen, color, rectangle, 1 )
+    if dragging:
+        pygame.draw.rect(screen, brush_color, (top_left, size1), 1)
 
     pygame.display.flip()
     clock.tick(FPS)
